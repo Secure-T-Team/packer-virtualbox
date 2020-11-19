@@ -13,4 +13,5 @@ RUN apt-get -y update && \
     unzip packer.zip && \
     chmod +x packer && \
     mv packer /usr/local/bin && \
-    rm packer.zip
+    rm packer.zip && \
+    sudo /sbin/rcvboxdrv setup
