@@ -1,11 +1,16 @@
-from ubuntu
+from symbols/virtualbox
 
 # install virtualbox
-RUN apk --no-cache add \
-    curl \
-    curl -OL "https://download.virtualbox.org/virtualbox/5.2.2/virtualbox-5.2_5.2.2-119230~Ubuntu~xenial_amd64.deb" \
-    dpkg -i virtualbox-5.2_5.2.2-119230~Ubuntu~xenial_amd64.deb
-
-# install packer
-RUN curl -OL "https://releases.hashicorp.com/packer/1.1.2/packer_1.1.2_linux_amd64.zip" \
-    unzip ./packer_1.1.2_linux_amd64.zip
+RUN apt-get -y update && \
+    apt-get -y install unzip && \
+    apt-get -y clean && \
+    PACKER_VERSION=`wget -O- https://releases.hashicorp.com/packer/ 2> /dev/null \
+      | fgrep '/packer' \
+      | head -1 \
+      | sed -r 's/.*packer_([0-9.]+).*/\1/'` && \
+    wget -O /root/packer.zip https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_amd64.zip && \
+    cd /root && \
+    unzip packer.zip && \
+    chmod +x packer && \
+    mv packer /usr/local/bin && \
+    rm packer.zip
